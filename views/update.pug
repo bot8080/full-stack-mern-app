@@ -1,0 +1,98 @@
+extends layout
+
+block content
+  h1 Update User
+
+  style.
+      h1 {
+      text-align : center ;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #f51474;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: blue;
+    }
+        hr{
+      border:2px solid black;
+    }
+
+
+    .cancel-button {
+      display: inline-block;
+      vertical-align: middle;
+      float: right; 
+      padding: 10px 20px; 
+      background-color: red;
+      color: white; 
+      border: 1px; 
+      border-radius: 5px; 
+      cursor: pointer;
+      text-decoration: none; 
+      transition: background-color 0.3s ease; 
+      }
+  hr
+
+  // Form for updating a user
+  form(action=`/update/${user._id}`, method='post')
+
+    label(for='firstName') First Name:
+    input(type='text', name='firstName', value=user.firstName, required)
+    
+    label(for='lastName') Last Name:
+    input(type='text', name='lastName', value=user.lastName, required)
+
+    label(for='dob') Date of Birth:
+    input(type='date', name='dob', value=user.dob, required)
+
+    label(for='address1') Address 1:
+    input(type='text', name='address1', value=user.address1, required)
+
+    label(for='address2') Address 2:
+    input(type='text', name='address2', value=user.address2)
+
+    label(for='city') City:
+    input(type='text', name='city', value=user.city, required)
+
+    label(for='postalCode') Postal Code:
+    input(type='text', name='postalCode', value=user.postalCode, required)
+
+    label(for='country') Country:
+    input(type='text', name='country', value=user.country, required)
+
+    label(for='phoneNumber') Phone Number:
+    input(type='tel', name='phoneNumber', value=user.phoneNumber, required)
+
+    label(for='email') Email:
+    input(type='email', name='email', value=user.email, required)
+
+    label(for='userNotes') User Notes:
+    textarea(name='userNotes', rows='4', value=user.userNotes)
+
+    button(type='submit') Update User
+    a.cancel-button(href='/') cancel
+
