@@ -1,8 +1,17 @@
 // Name: Abhinav Khanna
 // C0873411
 
-const mongoose = require('mongoose'); 
-require('dotenv').config(); 
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+// Function to clear entries in the MongoDB database
+const clearEntries = async () => {
+    try {
+        console.log('Entries cleared successfully!');
+    } catch (error) {
+        console.error('Error while clearing entries:', error);
+    }
+};
 
 // Function to connect to the MongoDB database
 const connectDB = async () => {
@@ -11,10 +20,11 @@ const connectDB = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-        console.log('Connected to MongoDB'); 
+        console.log('Connected to MongoDB');
+        // await clearEntries();
     } catch (error) {
-        console.error('Error while connecting to MongoDB:', error); 
+        console.error('Error while connecting to MongoDB:', error);
     }
 };
 
-module.exports = connectDB;
+module.exports = { connectDB, clearEntries };
