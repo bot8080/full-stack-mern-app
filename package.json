@@ -1,5 +1,5 @@
 {
-  "name": "first_assignment",
+  "name": "FinalProject",
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
@@ -14,7 +14,7 @@
     "pug": "^3.0.2"
   },
   "scripts": {
-    "start": "concurrently \"nodemon server.js\" \"cd reactapplication && npm start\"",
+    "start": "concurrently \"nodemon server.js\" \"cd frontend && npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
