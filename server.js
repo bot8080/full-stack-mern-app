@@ -39,10 +39,10 @@ app.get('/users', async (req, res) => {
     res.json(users); 
 });
 
-// route to display the form for adding a new user
-app.get('/add', (req, res) => {
-    res.render('add'); 
-});
+// //route to display the form for adding a new user
+// app.get('/add', (req, res) => {
+//     res.render('add'); 
+// });
 
 // route to process the form submission for adding a new user
 app.post('/add', async (req, res) => {
@@ -61,19 +61,38 @@ app.post('/add', async (req, res) => {
 // route to display the form for updating a user
 app.get('/update/:id', async (req, res) => {
     const user = await User.findById(req.params.id); 
-    res.render('update', { user }); 
+    // console.log("USER", user);
+    res.send( user); 
 });
 
-// route to process the form submission for updating a user
+// route to update a user
 app.post('/update/:id', async (req, res) => {
-    await User.findByIdAndUpdate(req.params.id, req.body); 
-    res.redirect('/'); 
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ message: 'User updated successfully', user });
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred while updating the user', error });
+    }
 });
 
 // route to delete a user
-app.get('/delete/:id', async (req, res) => {
-    await User.findByIdAndDelete(req.params.id); 
-    res.redirect('/'); 
+app.post('/delete/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred while deleting the user', error });
+    }
 });
 
 app.listen(port, () => {

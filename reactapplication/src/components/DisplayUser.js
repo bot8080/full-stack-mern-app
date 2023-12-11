@@ -1,35 +1,52 @@
-// Import the necessary dependencies
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import '../styles/displayuser.css';
 
-// Define a functional component named DisplayUser
+// Define the DisplayUser component
 const DisplayUser = () => {
-    // Define state for users using the useState hook
+    // Use the useNavigate hook from react-router-dom to programmatically navigate to different routes
+    const navigate = useNavigate();
+
+    // Define a state variable for the users data, initially set to an empty array
     const [users, setUsers] = useState([]);
 
+    // Define an async function to fetch the users data from the server
     const fetchUserData = async () => {
-        try {
-            const response = await axios.get('http://localhost:3001/users');
-            const userData = response.data;
-            console.log(response);
-            setUsers(userData);
-        } catch (error) {
-            console.error('Error fetching user data:', error);
+        // Send a GET request to the server and await the response
+        const response = await axios.get('http://localhost:3001/users');
+
+        // Update the users state variable with the data from the response
+        setUsers(response.data);
+    };
+
+    const handleAction = async (e, id) => {
+        if (e.target.value === 'update') {
+            navigate(`/update/${id}`);
+        } else if (e.target.value === 'delete') {
+            if (window.confirm('Are you sure you want to delete this user?')) {
+                // If the user confirms, send a POST request to the server to delete the user with the given id
+                await axios.post(`http://localhost:3001/delete/${id}`);
+                fetchUserData();
+            }
         }
     };
 
-
-    // useEffect hook is used for side effects, such as data fetching
+    // Use the useEffect hook to fetch the users data when the component mounts
     useEffect(() => {
-        // Call the fetchUserData function when the component mounts
         fetchUserData();
-    }, []); // The empty dependency array ensures this effect runs only once on mount
+    }, []);
+
+    const handleAddUser = () => {
+        navigate('/add');
+    };
 
     return (
         <div>
-            {/* Your user table content goes here */}
-            <h2>User Table</h2>
-            {/* Display user data in a table */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2 style={{ margin: '0 auto', textAlign: 'center' }}>User Table</h2>
+                <button onClick={handleAddUser}>Add User</button>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -44,10 +61,10 @@ const DisplayUser = () => {
                         <th>Email</th>
                         <th>Postal Code</th>
                         <th>User Notes</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {/* Map through the users array and render a table row for each user */}
                     {users.map((user) => (
                         <tr key={user._id}>
                             <td>{user.firstName}</td>
@@ -61,6 +78,13 @@ const DisplayUser = () => {
                             <td>{user.email}</td>
                             <td>{user.postalCode}</td>
                             <td>{user.userNotes}</td>
+                            <td>
+                                <select onChange={(e) => handleAction(e, user._id)}>
+                                    <option value="">Action</option>
+                                    <option value="update">Update</option>
+                                    <option value="delete">Delete</option>
+                                </select>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -69,5 +93,4 @@ const DisplayUser = () => {
     );
 };
 
-// Export the DisplayUser component
 export default DisplayUser;

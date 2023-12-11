@@ -1,8 +1,11 @@
-// Import the necessary dependencies
 import React, { useState } from 'react';
+import '../styles/AddUser.css';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 // Define a functional component named AddUser
 const AddUser = () => {
+    const navigate = useNavigate();
 
     // Define state for form fields using the useState hook
     const [user, setUser] = useState({
@@ -28,41 +31,33 @@ const AddUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(user)
-            });
-            console.log("__________________________");
-            const responseData = await response.json();
-            console.log(responseData);
-
-            if (!response.ok) {
+            const response = await axios.post('http://localhost:3001/add', user);
+            console.log(response.data);
+    
+            if (response.data.success) {
+                console.log('User added successfully!');
+                setUser({
+                    firstName: '',
+                    lastName: '',
+                    dob: '',
+                    address1: '',
+                    address2: '',
+                    city: '',
+                    country: '',
+                    phoneNumber: '',
+                    email: '',
+                    postalCode: '',
+                    userNotes: '',
+                });
+                navigate('/');
+            } else {
                 throw new Error('Error adding user');
             }
-
-            console.log('User added successfully!');
-            // Reset the form fields
-            setUser({
-                firstName: '',
-                lastName: '',
-                dob: '',
-                address1: '',
-                address2: '',
-                city: '',
-                country: '',
-                phoneNumber: '',
-                email: '',
-                postalCode: '',
-                userNotes: '',
-            });
         } catch (error) {
-            // console.log(user);
             console.error('Error adding user:', error.message);
         }
     };
+
 
     // Return JSX to render the component
     return (
